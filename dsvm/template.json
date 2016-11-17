@@ -77,7 +77,7 @@
                     "osDisk": {
                         "name": "[variables('virtualMachineName')]",
                         "vhd": {
-                            "uri": "[concat(concat(reference(resourceId('dsjds-sndbx-vms', 'Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2015-06-15').primaryEndpoints['blob'], 'vhds/'), variables('virtualMachineName'), '20161017135951.vhd')]"
+                            "uri": "[concat(reference(variables('storageAccountName'), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, 'vhds/osdisk.vhd')]"
                         },
                         "createOption": "fromImage"
                     },
