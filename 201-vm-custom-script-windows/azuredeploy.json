@@ -28,8 +28,14 @@
             },
             "defaultValue": ""
         },
-        "pass": {
-            "type": "securestring",
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Password Blob."
+            }
+        },        
+        "shareName": {
+            "type": "string",
             "metadata": {
                 "description": "Password Blob."
             }
@@ -47,7 +53,7 @@
         "publicIPAddressName": "jfdpubip1",
         "dnsNameForPublicIP": "[uniqueString(resourceGroup().id)]",
         "scriptFileName": "Copy-FileFromAzure.ps1",
-        "scriptParameters": "[concat('-pass ', parameters('pass'))]"
+        "scriptParameters": "[concat('-storageAccountName ', parameters('storageAccountName'), ' ', '-shareName ', parameters('shareName'))]"
     },
     "resources": [
         {
