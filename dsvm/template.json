@@ -2,22 +2,22 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "commRG": {
+        "CommonResourceGroupName": {
             "type": "string",
             "defaultValue": "sndbx-comm-rg"
         },
-        "sndbxName":{
+        "SandboxName":{
             "type": "string",
             "defaultValue": "user1",
             "maxLength": 10
         },
-        "location": {
+        "Region": {
             "type": "string",
             "defaultValue": "canadaeast"
         },
         "virtualMachineSize": {
             "type": "string",
-            "defaultValue": "Standard_DS1_v2"
+            "defaultValue": "Standard_DS3_v2"
         },
         "adminUsername": {
             "type": "string"
@@ -29,31 +29,28 @@
         "adminPassword": {
             "type": "securestring"
         },
-        "storageAccountType": {
-            "type": "string",
-            "defaultValue": "Premium_LRS"
-        },
         "subnetName": {
             "type": "string",
             "defaultValue": "sndbx"
         }
     },
     "variables": {
-        "vnetId": "[resourceId(parameters('commRG'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
+        "vnetId": "[resourceId(parameters('CommonResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
-        "virtualMachineName": "[concat(parameters('sndbxName'), '-vm1')]",
-        "storageAccountName": "[concat(parameters('sndbxName'), uniqueString(resourceGroup().id))]",
-        "networkInterfaceName": "[concat(parameters('sndbxName'), '-nic')]",
-        "publicIpAddressName": "[concat(parameters('sndbxName'), '-pip')]",
+        "virtualMachineName": "[concat(parameters('SandboxName'), '-vm1')]",
+        "storageAccountName": "[concat(parameters('SandboxName'), uniqueString(resourceGroup().id))]",
+        "networkInterfaceName": "[concat(parameters('SandboxName'), '-nic')]",
+        "publicIpAddressName": "[concat(parameters('SandboxName'), '-pip')]",
         "publicIpAddressType": "Dynamic",
-        "networkSecurityGroupName": "[concat(parameters('sndbxName'), '-nsg')]"
+        "networkSecurityGroupName": "[concat(parameters('SandboxName'), '-nsg')]",
+        "storageAccountType": "Premium_LRS"
     },
     "resources": [
         {
             "name": "[variables('virtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2015-06-15",
-            "location": "[parameters('location')]",
+            "location": "[parameters('Region')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
@@ -104,16 +101,16 @@
             "name": "[variables('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2015-06-15",
-            "location": "[parameters('location')]",
+            "location": "[parameters('Region')]",
             "properties": {
-                "accountType": "[parameters('storageAccountType')]"
+                "accountType": "[variables('storageAccountType')]"
             }
         },
         {
             "name": "[variables('networkInterfaceName')]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2016-09-01",
-            "location": "[parameters('location')]",
+            "location": "[parameters('Region')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIpAddresses/', variables('publicIpAddressName'))]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
@@ -142,7 +139,7 @@
             "name": "[variables('publicIpAddressName')]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2016-09-01",
-            "location": "[parameters('location')]",
+            "location": "[parameters('Region')]",
             "properties": {
                 "publicIpAllocationMethod": "[variables('publicIpAddressType')]"
             }
@@ -151,7 +148,7 @@
             "name": "[variables('networkSecurityGroupName')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2016-09-01",
-            "location": "[parameters('location')]",
+            "location": "[parameters('Region')]",
             "properties": {
                 "securityRules": [
                     {
