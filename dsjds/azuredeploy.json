@@ -11,19 +11,19 @@
             "type": "String"
         },
         "runbooks_AzureAutomationTutorial_name": {
-            "defaultValue": "dsjds1-sndbx-auto/AzureAutomationTutorial",
+            "defaultValue": "AzureAutomationTutorial",
             "type": "String"
         },
         "runbooks_AzureAutomationTutorialScript_name": {
-            "defaultValue": "dsjds1-sndbx-auto/AzureAutomationTutorialScript",
+            "defaultValue": "AzureAutomationTutorialScript",
             "type": "String"
         },
         "runbooks_AzureClassicAutomationTutorial_name": {
-            "defaultValue": "dsjds1-sndbx-auto/AzureClassicAutomationTutorial",
+            "defaultValue": "AzureClassicAutomationTutorial",
             "type": "String"
         },
         "runbooks_AzureClassicAutomationTutorialScript_name": {
-            "defaultValue": "dsjds1-sndbx-auto/AzureClassicAutomationTutorialScript",
+            "defaultValue": "AzureClassicAutomationTutorialScript",
             "type": "String"
         },
         "modules_Azure_name": {
