@@ -1,9 +1,9 @@
 # Deploy a Windows VM and execute a custom PowerShell script.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FSupraconductor%2Fdsjds%2Fmaster%2F201-vm-custom-script-windows%2Fazuredeploy.json" target="_blank">
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FSupraconductor%2Fmyazuretemplates%2Fmaster%2Fdsjds%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSupraconductor%2Fdsjds%2Fmaster%2F201-vm-custom-script-windows%2Fazuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FSupraconductor%2Fmyazuretemplates%2Fmaster%2Fdsjds%2Fazuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
