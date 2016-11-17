@@ -27,6 +27,12 @@
                 "description": "The sasToken required to access _artifactsLocation.  When the template is deployed using the accompanying scripts, a sasToken will be automatically generated."
             },
             "defaultValue": ""
+        },
+        "pass": {
+            "type": "securestring",
+            "metadata": {
+                "description": "Password Blob."
+            }
         }
     },
     "variables": {
@@ -42,8 +48,7 @@
         "dnsNameForPublicIP": "[uniqueString(resourceGroup().id)]",
         "scriptFolder": ".",
         "scriptFileName": "Copy-FileFromAzure.ps1",
-        "fileToBeCopied": "FileToBeCopied.txt",
-        "scriptParameters": "[concat('-artifactsLocation ', parameters('_artifactsLocation'), ' -artifactsLocationSasToken \"', parameters('_artifactsLocationSasToken'), '\" -folderName ', variables('scriptFolder'), ' -fileToInstall ', variables('fileToBeCopied'))]"
+        "scriptParameters": "[concat('-pass ', parameters('pass'))]"
     },
     "resources": [
         {

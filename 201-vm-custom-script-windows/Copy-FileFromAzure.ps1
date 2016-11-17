@@ -1,12 +1,8 @@
 <# Custom Script for Windows to install a file from Azure Storage using the staging folder created by the deployment script #>
 param (
-    [string]$artifactsLocation,
-    [string]$artifactsLocationSasToken,
-    [string]$folderName,
-    [string]$fileToInstall
+    [string]$pass
 )
 
-$source = $artifactsLocation + "\$folderName\$fileToInstall" + $artifactsLocationSasToken
-$dest = "C:\WindowsAzure\$folderName"
-New-Item -Path $dest -ItemType directory
-Invoke-WebRequest $source -OutFile "$dest\$fileToInstall"
+$pass="FooBoo"|ConvertTo-SecureString -AsPlainText -Force
+$cred = New-Object System.Management.Automation.PsCredential('blobanalyticsgtd',$pass)
+New-PSDrive –Name "S" –PSProvider FileSystem –Root "\\blobanalyticsgtd.file.core.windows.net\dsvmshare" –Persist 
