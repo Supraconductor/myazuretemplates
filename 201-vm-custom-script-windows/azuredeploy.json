@@ -19,7 +19,7 @@
             "metadata": {
                 "description": "The base URI where artifacts required by this template are located. When the template is deployed using the accompanying scripts, a private location in the subscription will be used and this value will be automatically generated."
             },
-            "defaultValue": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-vm-custom-script-windows"
+            "defaultValue": "https://raw.githubusercontent.com/Supraconductor/myazuretemplates/master/201-vm-custom-script-windows"
         },
         "_artifactsLocationSasToken": {
             "type": "securestring",
@@ -46,7 +46,6 @@
         "vhdStorageAccountName": "[uniqueString(resourceGroup().id, 'storage')]",
         "publicIPAddressName": "jfdpubip1",
         "dnsNameForPublicIP": "[uniqueString(resourceGroup().id)]",
-        "scriptFolder": ".",
         "scriptFileName": "Copy-FileFromAzure.ps1",
         "scriptParameters": "[concat('-pass ', parameters('pass'))]"
     },
@@ -179,9 +178,9 @@
                         "autoUpgradeMinorVersion": true,
                         "settings": {
                             "fileUris": [
-                                "[concat(parameters('_artifactsLocation'), '/', variables('ScriptFolder'), '/', variables('ScriptFileName'), parameters('_artifactsLocationSasToken'))]"
+                                "[concat(parameters('_artifactsLocation'), '/', variables('ScriptFileName'), parameters('_artifactsLocationSasToken'))]"
                             ],
-                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFolder'), '/', variables('scriptFileName'), ' ', variables('scriptParameters'))]"
+                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFileName'), ' ', variables('scriptParameters'))]"
                         }
                     }
                 }
