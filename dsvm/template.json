@@ -26,9 +26,6 @@
             "type": "string",
             "defaultValue": "sndbx-comm-vnet"
         },
-        "networkSecurityGroupName": {
-            "type": "string"
-        },
         "adminPassword": {
             "type": "securestring"
         },
@@ -48,7 +45,8 @@
         "storageAccountName": "[concat(parameters('sndbxName'), uniqueString(resourceGroup().id))]",
         "networkInterfaceName": "[concat(parameters('sndbxName'), '-nic')]",
         "publicIpAddressName": "[concat(parameters('sndbxName'), '-pip')]",
-        "publicIpAddressType": "Dynamic"
+        "publicIpAddressType": "Dynamic",
+        "networkSecurityGroupName": "[concat(parameters('sndbxName'), '-nsg')]"
     },
     "resources": [
         {
@@ -118,7 +116,7 @@
             "location": "[parameters('location')]",
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIpAddresses/', variables('publicIpAddressName'))]",
-                "[concat('Microsoft.Network/networkSecurityGroups/', parameters('networkSecurityGroupName'))]"
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
             ],
             "properties": {
                 "ipConfigurations": [
@@ -136,7 +134,7 @@
                     }
                 ],
                 "networkSecurityGroup": {
-                    "id": "[resourceId('dsjds-sndbx-vms', 'Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
+                    "id": "[resourceId('dsjds-sndbx-vms', 'Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
                 }
             }
         },
@@ -150,7 +148,7 @@
             }
         },
         {
-            "name": "[parameters('networkSecurityGroupName')]",
+            "name": "[variables('networkSecurityGroupName')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2016-09-01",
             "location": "[parameters('location')]",
