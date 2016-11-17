@@ -3,6 +3,5 @@ param (
     [string]$pass
 )
 
-$pass="FooBoo"|ConvertTo-SecureString -AsPlainText -Force
 $cred = New-Object System.Management.Automation.PsCredential('blobanalyticsgtd',$pass)
 New-PSDrive –Name "S" –PSProvider FileSystem –Root "\\blobanalyticsgtd.file.core.windows.net\dsvmshare" –Persist 
