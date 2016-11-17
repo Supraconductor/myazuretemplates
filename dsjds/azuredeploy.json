@@ -27,7 +27,7 @@
             "type": "String"
         },
         "modules_Azure_name": {
-            "defaultValue": "Azure",
+            "defaultValue": "AzureModule",
             "type": "String"
         },
         "modules_Azure.Storage_name": {
