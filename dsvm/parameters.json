@@ -2,44 +2,18 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "location": {
-            "value": "canadaeast"
+        "GroupeDeTravail": {
+            "value": "Desjardins groupe 1"
         },
-        "virtualMachineName": {
-            "value": "vmds"
-        },
-        "virtualMachineSize": {
-            "value": "Standard_DS1_v2"
+        "SandboxName": {
+            "value": "user1"
         },
         "adminUsername": {
             "value": "jfdore"
         },
-        "storageAccountName": {
-            "value": "dsjdssndbxvmsdisks813"
-        },
-        "virtualNetworkName": {
-            "value": "sndbx-comm-vnet"
-        },
-        "networkInterfaceName": {
-            "value": "vmds831"
-        },
-        "networkSecurityGroupName": {
-            "value": "vmds-nsg"
-        },
+
         "adminPassword": {
             "value": null
-        },
-        "storageAccountType": {
-            "value": "Premium_LRS"
-        },
-        "subnetName": {
-            "value": "sndbx"
-        },
-        "publicIpAddressName": {
-            "value": "vmds-ip"
-        },
-        "publicIpAddressType": {
-            "value": "Dynamic"
         }
     }
 }
