@@ -4,16 +4,39 @@
     "parameters": {
         "CommonResourceGroupName": {
             "type": "string",
-            "defaultValue": "sndbx-comm-rg"
+            "defaultValue": "sndbx-comm-rg",
+            "metadata": {
+                "description": "Groupe de ressources pour les ressources communes"
+            }
+        },
+        "GroupeDeTravail": {
+            "type": "string",
+            "defaultValue": "Desjardins groupe 1",
+            "metadata": {
+                "description": "Nom du groupe de travail"
+            }
+        },
+        "virtualNetworkName": {
+            "type": "string",
+            "defaultValue": "sndbx-comm-vnet",
+            "metadata": {
+                "description": "Nom du VNet commun à utiliser"
+            }
+        },
+        "subnetName": {
+            "type": "string",
+            "defaultValue": "sndbx",
+            "metadata": {
+                "description": "Nom du subnet du VNet commun à utiliser"
+            }
         },
         "SandboxName":{
             "type": "string",
             "defaultValue": "user1",
-            "maxLength": 10
-        },
-        "Region": {
-            "type": "string",
-            "defaultValue": "canadaeast"
+            "maxLength": 10,
+            "metadata": {
+                "description": "Nom du sandbox - doit être unique dans le groupe de ressources communes"
+            }
         },
         "virtualMachineSize": {
             "type": "string",
@@ -22,38 +45,43 @@
         "adminUsername": {
             "type": "string"
         },
-        "virtualNetworkName": {
-            "type": "string",
-            "defaultValue": "sndbx-comm-vnet"
-        },
         "adminPassword": {
-            "type": "securestring"
-        },
-        "subnetName": {
-            "type": "string",
-            "defaultValue": "sndbx"
+            "type": "securestring",
+            "minLength": 12
         }
     },
     "variables": {
         "vnetId": "[resourceId(parameters('CommonResourceGroupName'),'Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
         "virtualMachineName": "[concat(parameters('SandboxName'), '-vm1')]",
-        "storageAccountName": "[concat(parameters('SandboxName'), uniqueString(resourceGroup().id))]",
+        "storageAccountName": "[concat(parameters('SandboxName'), 'vms', uniqueString(resourceGroup().id))]",
+        "sharedStorageAccountName": "[concat(parameters('SandboxName'), 'share', uniqueString(resourceGroup().id))]",
         "networkInterfaceName": "[concat(parameters('SandboxName'), '-nic')]",
         "publicIpAddressName": "[concat(parameters('SandboxName'), '-pip')]",
         "publicIpAddressType": "Dynamic",
         "networkSecurityGroupName": "[concat(parameters('SandboxName'), '-nsg')]",
-        "storageAccountType": "Premium_LRS"
+        "storageAccountType": "Premium_LRS",
+        "Region": "[resourceGroup().location]",
+        "scriptFileName": "create-map-cmd-file.ps1",
+        "artifactsLocation":"https://raw.githubusercontent.com/Supraconductor/myazuretemplates/master/dsvm",
+        "artifactsLocationSasToken": "",
+        "shareName": "partage",
+        "scriptParameters": "[concat('-storageAccountName ', variables('sharedStorageAccountName'), ' ', '-shareName ', variables('shareName'))]"
+        
     },
     "resources": [
         {
             "name": "[variables('virtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2015-06-15",
-            "location": "[parameters('Region')]",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('GroupeDeTravail')]"
+            },
             "dependsOn": [
                 "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]",
-                "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+                "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('sharedStorageAccountName'))]"
             ],
             "properties": {
                 "osProfile": {
@@ -95,22 +123,63 @@
                 "name": "standard-data-science-vm",
                 "publisher": "microsoft-ads",
                 "product": "standard-data-science-vm"
-            }
+            },
+            "resources": [
+                {
+                    "type": "extensions",
+                    "name": "CustomScriptExtension",
+                    "apiVersion": "2015-06-15",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[variables('virtualMachineName')]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.8",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "[concat(variables('artifactsLocation'), '/', variables('ScriptFileName'), variables('artifactsLocationSasToken'))]"
+                            ],
+                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFileName'), ' ', variables('scriptParameters'))]"
+                        }
+                    }
+                }
+            ]
         },
         {
             "name": "[variables('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2015-06-15",
-            "location": "[parameters('Region')]",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('GroupeDeTravail')]"
+            },
             "properties": {
                 "accountType": "[variables('storageAccountType')]"
+            }
+        },
+        {
+            "name": "[variables('sharedStorageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2015-06-15",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('GroupeDeTravail')]"
+            },
+            "properties": {
+                "accountType": "Standard_LRS"
             }
         },
         {
             "name": "[variables('networkInterfaceName')]",
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2016-09-01",
-            "location": "[parameters('Region')]",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('GroupeDeTravail')]"
+            },
             "dependsOn": [
                 "[concat('Microsoft.Network/publicIpAddresses/', variables('publicIpAddressName'))]",
                 "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
@@ -139,7 +208,10 @@
             "name": "[variables('publicIpAddressName')]",
             "type": "Microsoft.Network/publicIpAddresses",
             "apiVersion": "2016-09-01",
-            "location": "[parameters('Region')]",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('GroupeDeTravail')]"
+            },
             "properties": {
                 "publicIpAllocationMethod": "[variables('publicIpAddressType')]"
             }
@@ -148,7 +220,10 @@
             "name": "[variables('networkSecurityGroupName')]",
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2016-09-01",
-            "location": "[parameters('Region')]",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('GroupeDeTravail')]"
+            },
             "properties": {
                 "securityRules": [
                     {
