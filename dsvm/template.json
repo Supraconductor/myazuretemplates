@@ -270,9 +270,13 @@
         }
     ],
     "outputs": {
-        "adminUsername": {
+        "sharedStorageAccountName": {
             "type": "string",
-            "value": "[parameters('adminUsername')]"
+            "value": "[variables('sharedStorageAccountName')]"
+        },
+        "key": {
+            "type": "string",
+            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('sharedStorageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).key1]"
         }
     }
 }
