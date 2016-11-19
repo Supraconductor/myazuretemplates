@@ -55,7 +55,7 @@
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subnetName'))]",
         "virtualMachineName": "[concat(parameters('SandboxName'), '-vm1')]",
         "storageAccountName": "[concat(parameters('SandboxName'), 'vms', uniqueString(resourceGroup().id))]",
-        "sharedStorageAccountName": "[concat(parameters('SandboxName'), 'share', uniqueString(resourceGroup().id))]",
+        "sharedStorageAccountName": "[concat(parameters('SandboxName'), 'shr', uniqueString(resourceGroup().id))]",
         "networkInterfaceName": "[concat(parameters('SandboxName'), '-nic')]",
         "publicIpAddressName": "[concat(parameters('SandboxName'), '-pip')]",
         "publicIpAddressType": "Dynamic",
