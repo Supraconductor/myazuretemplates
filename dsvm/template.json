@@ -72,7 +72,7 @@
     "resources": [
         {
             "apiVersion": "2015-10-01",
-            "name": "[concat(parameters('SandboxName'), '-df')]",
+            "name": "[concat(parameters('SandboxName'), '-', uniqueString(resourceGroup().id), '-df')]",
             "location": "eastus",
             "type": "Microsoft.DataFactory/dataFactories",
             "properties": {}
