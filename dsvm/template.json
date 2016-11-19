@@ -71,6 +71,13 @@
     },
     "resources": [
         {
+            "apiVersion": "2015-06-15",
+            "name": "[concat(parameters('SandboxName'), '-df')]",
+            "location": "EastUS",
+            "type": "Microsoft.DataFactory/dataFactories",
+            "properties": {}
+        },
+        {
             "name": "[variables('virtualMachineName')]",
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2015-06-15",
