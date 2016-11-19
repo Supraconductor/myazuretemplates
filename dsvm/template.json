@@ -63,7 +63,7 @@
         "storageAccountType": "Premium_LRS",
         "Region": "[resourceGroup().location]",
         "scriptFileName": "create-map-cmd-file.ps1",
-        "artifactsLocation":"https://raw.githubusercontent.com/Supraconductor/myazuretemplates/master/dsvm",
+        "artifactsLocation":"https://sndbxcomtempl.blob.core.windows.net/templates",
         "artifactsLocationSasToken": "",
         "shareName": "partage",
         "scriptParameters": "[concat('-storageAccountName ', variables('sharedStorageAccountName'), ' ', '-shareName ', variables('shareName'))]"
@@ -71,9 +71,9 @@
     },
     "resources": [
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2015-10-01",
             "name": "[concat(parameters('SandboxName'), '-df')]",
-            "location": "EastUS",
+            "location": "eastus",
             "type": "Microsoft.DataFactory/dataFactories",
             "properties": {}
         },
