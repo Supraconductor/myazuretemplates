@@ -63,7 +63,7 @@
         "storageAccountType": "Premium_LRS",
         "Region": "[resourceGroup().location]",
         "scriptFileName": "create-map-cmd-file.ps1",
-        "artifactsLocation":"https://sndbxcomtempl.blob.core.windows.net/templates",
+        "artifactsLocation":"https://adlsandboxcmnstorage.blob.core.windows.net/templates",
         "artifactsLocationSasToken": "",
         "shareName": "partage",
         "scriptParameters": "[concat('-storageAccountName ', variables('sharedStorageAccountName'), ' ', '-shareName ', variables('shareName'))]"
