@@ -33,7 +33,7 @@
         "SandboxName":{
             "type": "string",
             "defaultValue": "user1",
-            "maxLength": 10,
+            "maxLength": 8,
             "metadata": {
                 "description": "Nom du sandbox - doit être unique dans le groupe de ressources communes"
             }
