@@ -4,7 +4,7 @@
     "parameters": {
         "ProjectName_unique": {
             "defaultValue": null,
-            "type": "SecureString"
+            "type": "String"
         },
         "APIManagementPublisherEmail": {
             "defaultValue": null,
@@ -63,6 +63,23 @@
             },
             "resources": [],
             "dependsOn": []
+        },
+        {
+            "apiVersion": "2016-03-01",
+            "name": "[parameters('ProjectName_unique')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "Canada East",
+            "sku": {
+                "name": "S1",
+                "tier": "Standard",
+                "size": "S1",
+                "family": "S",
+                "capacity": 1
+            },
+            "kind": "app",
+            "properties": {
+                "name": "[parameters('ProjectName_unique')]"
+            }
         }
     ]
 }
