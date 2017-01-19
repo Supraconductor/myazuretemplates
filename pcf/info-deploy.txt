@@ -1,0 +1,13 @@
+data:    storageAccountName  String        pcfstojfd123
+data:    vmSize              String        Standard_DS2_v2
+data:    adminUsername       String        ubuntu
+data:    adminSSHKey         SecureString  undefined
+data:    tenantID            String        72f988bf-86f1-41af-91ab-2d7cd011db47
+data:    clientID            String        1d96e91c-f939-4435-8e96-0188a43b6409
+data:    clientSecret        SecureString  undefined
+data:    location            String        canadaeast
+data:    Outputs            :
+data:    Name                          Type    Value
+data:    ----------------------------  ------  ------------------------------------------------------
+data:    opsMan-FQDN                   String  pcf-opsman-xdbhb6wdc3bzg.canadaeast.cloudapp.azure.com
+data:    extra Storage Account Prefix  String  xtrastrgxdbhb6wdc3bzg

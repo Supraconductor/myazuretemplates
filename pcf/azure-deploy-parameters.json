@@ -1,0 +1,30 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "storageAccountName": {
+      "value": "pcfstojfd124"
+    },
+    "adminSSHKey": {
+      "value": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCldP+k2JrEU7/zrUlrG95hfhi+wEeRM6EcSl6DKWVStrDEuM3qAr1M/onif8tEqyQ8SS/IYDpmFQ1Z3pw5girlZs/iOk+Mu700aw00P9WEI7tnILHCUo7RI6GlL6rn+HF7rODvjlnG91BCaVbT1fRjZRWsd25NgrQujXJMBXATkWnw0C60/4UxAGI7lUtsXcWX1pK/RfXN0Qb8l2Ovq5P6DLfzvz62OhYkuasOndLlqlDgOaUp38H52GRLX87B/6P/GOLtVAC9llYvaNO6PeNB5v8PItWYRz54rZIJ37AfgkkNGAwbxLiU5Q9lH7iw6jYraXFuyDz/xfuybwYxUmcr ubuntu"
+    },
+    "tenantID": {
+      "value": "72f988bf-86f1-41af-91ab-2d7cd011db47"
+    },
+    "clientID": {
+      "value": "1d96e91c-f939-4435-8e96-0188a43b6409"
+    },
+    "clientSecret": {
+      "value": "!"
+    },
+    "vmSize": {
+      "value": "Standard_DS2_v2"
+    },
+    "adminUsername": {
+      "value": "ubuntu"
+    },
+    "location": {
+      "value": "canadaeast"
+    }
+  }
+}
