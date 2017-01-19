@@ -2,24 +2,28 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "databaseAccounts_jfdbnc_name": {
+        "databaseAccounts_projectx_name": {
             "defaultValue": null,
             "type": "SecureString"
         },
-        "service_jfdbncmean_name": {
-            "defaultValue": "jfdbncmean",
+        "APIManagementPublisherEmail": {
+            "defaultValue": null,
             "type": "String"
         },
-        "databaseAccounts_jfdbnc_name_1": {
-            "defaultValue": "jfdbnc",
+        "service_projectx_name": {
+            "defaultValue": "projectx",
             "type": "String"
         },
-        "components_jfdbncmeanapi_name": {
-            "defaultValue": "jfdbncmeanapi",
+        "databaseAccounts_projectx_name_1": {
+            "defaultValue": "projectx",
             "type": "String"
         },
-        "virtualNetworks_jfdbnc_vnet_name": {
-            "defaultValue": "jfdbnc-vnet",
+        "components_projectxapi_name": {
+            "defaultValue": "projectxapi",
+            "type": "String"
+        },
+        "virtualNetworks_projectx_vnet_name": {
+            "defaultValue": "projectx-vnet",
             "type": "String"
         },
         "storageAccounts_functionf549fb68ace8_name": {
@@ -30,47 +34,39 @@
             "defaultValue": "CanadaCentralPlan",
             "type": "String"
         },
-        "serverfarms_mean_appservplan_name": {
-            "defaultValue": "mean-appservplan",
+        "serverfarms__appservplan_name": {
+            "defaultValue": "-appservplan",
             "type": "String"
         },
-        "sites_jfdbncmean_name": {
-            "defaultValue": "jfdbncmean",
+        "sites_projectx_name": {
+            "defaultValue": "projectx",
             "type": "String"
         },
-        "sites_jfdbncmeanapi_name": {
-            "defaultValue": "jfdbncmeanapi",
+        "sites_projectxapi_name": {
+            "defaultValue": "projectxapi",
             "type": "String"
         }
     },
     "variables": {},
     "resources": [
         {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.ApiManagement/service/jfdbncmean'.",
             "type": "Microsoft.ApiManagement/service",
             "sku": {
                 "name": "Developer",
                 "capacity": 1
             },
-            "name": "[parameters('service_jfdbncmean_name')]",
+            "name": "[parameters('service_projectx_name')]",
             "apiVersion": "2016-07-07",
             "location": "Canada East",
             "tags": {},
             "properties": {
-                "publisherEmail": "jfdore@microsoft.com",
-                "publisherName": "jfdbnc",
-                "provisioningState": "Succeeded",
-                "targetProvisioningState": "",
-                "createdAtUtc": "2017-01-19T17:24:59.7161364Z",
-                "runtimeUrl": "[concat('https://', parameters('service_jfdbncmean_name'),'.azure-api.net')]",
-                "portalUrl": "[concat('https://', parameters('service_jfdbncmean_name'),'.portal.azure-api.net')]",
-                "managementApiUrl": "[concat('https://', parameters('service_jfdbncmean_name'),'.management.azure-api.net')]",
-                "scmUrl": "[concat('https://', parameters('service_jfdbncmean_name'),'.scm.azure-api.net')]",
-                "addresserEmail": null,
+                "publisherEmail": "[parameters('APIManagementPublisherEmail')]",
+                "publisherName": "projectx",
+                "runtimeUrl": "[concat('https://', parameters('service_projectx_name'),'.azure-api.net')]",
+                "portalUrl": "[concat('https://', parameters('service_projectx_name'),'.portal.azure-api.net')]",
+                "managementApiUrl": "[concat('https://', parameters('service_projectx_name'),'.management.azure-api.net')]",
+                "scmUrl": "[concat('https://', parameters('service_projectx_name'),'.scm.azure-api.net')]",
                 "hostnameConfigurations": [],
-                "staticIPs": [
-                    "52.232.130.218"
-                ],
                 "additionalLocations": null,
                 "vpnconfiguration": null,
                 "customProperties": null,
@@ -78,201 +74,6 @@
             },
             "resources": [],
             "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.DocumentDB/databaseAccounts/jfdbnc'.",
-            "type": "Microsoft.DocumentDB/databaseAccounts",
-            "kind": "MongoDB",
-            "name": "[parameters('databaseAccounts_jfdbnc_name_1')]",
-            "apiVersion": "2015-04-08",
-            "location": "Canada East",
-            "tags": {},
-            "properties": {
-                "databaseAccountOfferType": "Standard",
-                "consistencyPolicy": {
-                    "defaultConsistencyLevel": "Session",
-                    "maxIntervalInSeconds": 5,
-                    "maxStalenessPrefix": 100
-                },
-                "name": "[parameters('databaseAccounts_jfdbnc_name')]"
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/microsoft.insights/components/jfdbncmeanapi'.",
-            "type": "microsoft.insights/components",
-            "kind": "web",
-            "name": "[parameters('components_jfdbncmeanapi_name')]",
-            "apiVersion": "2014-04-01",
-            "location": "eastus",
-            "tags": {
-                "hidden-link:/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.Web/sites/jfdbncmeanapi": "Resource"
-            },
-            "properties": {
-                "ApplicationId": "[parameters('components_jfdbncmeanapi_name')]"
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.Network/virtualNetworks/jfdbnc-vnet'.",
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[parameters('virtualNetworks_jfdbnc_vnet_name')]",
-            "apiVersion": "2016-03-30",
-            "location": "westus",
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "192.168.250.0/23"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "default",
-                        "properties": {
-                            "addressPrefix": "192.168.250.0/24"
-                        }
-                    }
-                ]
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/mean/providers/Microsoft.Storage/storageAccounts/functionf549fb68ace8'.",
-            "type": "Microsoft.Storage/storageAccounts",
-            "sku": {
-                "name": "Standard_LRS",
-                "tier": "Standard"
-            },
-            "kind": "Storage",
-            "name": "[parameters('storageAccounts_functionf549fb68ace8_name')]",
-            "apiVersion": "2016-01-01",
-            "location": "canadacentral",
-            "tags": {},
-            "properties": {},
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.Web/serverfarms/CanadaCentralPlan'.",
-            "type": "Microsoft.Web/serverfarms",
-            "sku": {
-                "name": "Y1",
-                "tier": "Dynamic",
-                "size": "Y1",
-                "family": "Y",
-                "capacity": 0
-            },
-            "kind": "functionapp",
-            "name": "[parameters('serverfarms_CanadaCentralPlan_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "Canada Central",
-            "properties": {
-                "name": "[parameters('serverfarms_CanadaCentralPlan_name')]",
-                "numberOfWorkers": 0
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.Web/serverfarms/mean-appservplan'.",
-            "type": "Microsoft.Web/serverfarms",
-            "sku": {
-                "name": "S1",
-                "tier": "Standard",
-                "size": "S1",
-                "family": "S",
-                "capacity": 1
-            },
-            "kind": "app",
-            "name": "[parameters('serverfarms_mean_appservplan_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "Canada East",
-            "properties": {
-                "name": "[parameters('serverfarms_mean_appservplan_name')]",
-                "numberOfWorkers": 1
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.Web/sites/jfdbncmean'.",
-            "type": "Microsoft.Web/sites",
-            "kind": "functionapp",
-            "name": "[parameters('sites_jfdbncmean_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "Canada Central",
-            "properties": {
-                "name": "[parameters('sites_jfdbncmean_name')]",
-                "hostNames": [
-                    "jfdbncmean.azurewebsites.net"
-                ],
-                "enabledHostNames": [
-                    "jfdbncmean.azurewebsites.net",
-                    "jfdbncmean.scm.azurewebsites.net"
-                ],
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('sites_jfdbncmean_name'),'.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    },
-                    {
-                        "name": "[concat(parameters('sites_jfdbncmean_name'),'.scm.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    }
-                ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_CanadaCentralPlan_name'))]"
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_CanadaCentralPlan_name'))]"
-            ]
-        },
-        {
-            "comments": "Generalized from resource: '/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourceGroups/MEAN/providers/Microsoft.Web/sites/jfdbncmeanapi'.",
-            "type": "Microsoft.Web/sites",
-            "kind": "api",
-            "name": "[parameters('sites_jfdbncmeanapi_name')]",
-            "apiVersion": "2015-08-01",
-            "location": "Canada East",
-            "tags": {
-                "hidden-related:/subscriptions/647d13d9-bb61-42c4-8de9-8ad28c086480/resourcegroups/MEAN/providers/Microsoft.Web/serverfarms/mean-appservplan": "empty"
-            },
-            "properties": {
-                "name": "[parameters('sites_jfdbncmeanapi_name')]",
-                "hostNames": [
-                    "jfdbncmeanapi.azurewebsites.net"
-                ],
-                "enabledHostNames": [
-                    "jfdbncmeanapi.azurewebsites.net",
-                    "jfdbncmeanapi.scm.azurewebsites.net"
-                ],
-                "hostNameSslStates": [
-                    {
-                        "name": "[concat(parameters('sites_jfdbncmeanapi_name'),'.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    },
-                    {
-                        "name": "[concat(parameters('sites_jfdbncmeanapi_name'),'.scm.azurewebsites.net')]",
-                        "sslState": 0,
-                        "thumbprint": null,
-                        "ipBasedSslState": 0
-                    }
-                ],
-                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_mean_appservplan_name'))]"
-            },
-            "resources": [],
-            "dependsOn": [
-                "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_mean_appservplan_name'))]"
-            ]
         }
     ]
 }
