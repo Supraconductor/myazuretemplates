@@ -2,12 +2,16 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "ProjectName_unique": {
+        "databaseAccounts_projectx_name": {
             "defaultValue": null,
             "type": "SecureString"
         },
         "APIManagementPublisherEmail": {
             "defaultValue": null,
+            "type": "String"
+        },
+        "service_projectx_name": {
+            "defaultValue": "projectx",
             "type": "String"
         },
         "databaseAccounts_projectx_name_1": {
@@ -46,20 +50,27 @@
     "variables": {},
     "resources": [
         {
-            "type": "Microsoft.DocumentDB/databaseAccounts",
-            "kind": "GlobalDocumentDB",
-            "name": "[parameters('ProjectName_unique')]",
-            "apiVersion": "2015-04-08",
+            "type": "Microsoft.ApiManagement/service",
+            "sku": {
+                "name": "Developer",
+                "capacity": 1
+            },
+            "name": "[parameters('service_projectx_name')]",
+            "apiVersion": "2016-07-07",
             "location": "Canada East",
             "tags": {},
             "properties": {
-                "databaseAccountOfferType": "Standard",
-                "consistencyPolicy": {
-                    "defaultConsistencyLevel": "Session",
-                    "maxIntervalInSeconds": 5,
-                    "maxStalenessPrefix": 100
-                },
-                "name": "[parameters('ProjectName_unique')]"
+                "publisherEmail": "[parameters('APIManagementPublisherEmail')]",
+                "publisherName": "projectx",
+                "runtimeUrl": "[concat('https://', parameters('service_projectx_name'),'.azure-api.net')]",
+                "portalUrl": "[concat('https://', parameters('service_projectx_name'),'.portal.azure-api.net')]",
+                "managementApiUrl": "[concat('https://', parameters('service_projectx_name'),'.management.azure-api.net')]",
+                "scmUrl": "[concat('https://', parameters('service_projectx_name'),'.scm.azure-api.net')]",
+                "hostnameConfigurations": [],
+                "additionalLocations": null,
+                "vpnconfiguration": null,
+                "customProperties": null,
+                "vpnType": 0
             },
             "resources": [],
             "dependsOn": []
