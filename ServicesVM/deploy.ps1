@@ -1,7 +1,10 @@
 param(
  [Parameter(Mandatory=$True, HelpMessage="Nom du groupe de ressources pour la VM")]
  [string]
- $vmResourceGroupName
+ $vmResourceGroupName,
+ [Parameter(Mandatory=$True, HelpMessage="Valeur du tag: group")]
+ [string]
+ $groupTag
  )
 
 $templateFilePath = "template.json"
