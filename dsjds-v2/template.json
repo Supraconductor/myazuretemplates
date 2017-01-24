@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "groupTag": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du groupe de travail. Utilisé pour le tagging"
+            }
+        }
+    },
+    "variables": {
+        "storageAccountName": "[concat('shr', uniqueString(resourceGroup().id))]",
+        "storageAccountNameVHD": "[concat('vhd', uniqueString(resourceGroup().id))]"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Network/virtualNetworks",
+            "name": "[concat(resourceGroup().name, '-vnet')]",
+            "apiVersion": "2016-03-30",
+            "location": "canadaeast",
+            "tags": {
+                "groupe":"[parameters('groupTag')]"
+            },
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.3.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "sndbx",
+                        "properties": {
+                            "addressPrefix": "10.3.0.0/24"
+                        }
+                    }
+                ]
+            },
+            "resources": [],
+            "dependsOn": []
+        },
+        {
+            "name": "[variables('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2015-06-15",
+            "location": "canadaeast",
+            "tags": {
+                "groupe":"[parameters('groupTag')]"
+            },
+            "properties": {
+                "accountType": "Standard_LRS"
+            }
+        },
+        {
+            "name": "[variables('storageAccountNameVHD')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2015-06-15",
+            "location": "canadaeast",
+            "tags": {
+                "groupe":"[parameters('groupTag')]"
+            },
+            "properties": {
+                "accountType": "Premium_LRS"
+            }
+        }
+    ],
+    "outputs": {
+        "sharedStorage": {
+            "type": "string",
+            "value": "[variables('storageAccountName')]"
+        },
+        "vhdStorage": {
+            "type": "string",
+            "value": "[variables('storageAccountNameVHD')]"
+        },
+        "key": {
+            "type": "string",
+            "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).keys[0].value]"
+        }
+    }
+}

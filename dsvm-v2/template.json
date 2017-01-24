@@ -1,0 +1,283 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "pTeamResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Resource group de cette équipe pour les ressources communes."
+            }
+        },
+        "pSharedStorageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du storage account partagé pour les données."
+            }
+        },        
+        "pVHDStorageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du storage account partagé pour les VHD de données."
+            }
+        },
+        "pGroupeDeTravail": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du groupe de travail. Utilisé pour le tagging"
+            }
+        },
+        "pVirtualMachineSize": {
+            "type": "string",
+            "defaultValue": "Standard_DS3_v2"
+        },
+        "pAdminUsername": {
+            "type": "string",
+            "defaultValue": "dscadmin"
+        },
+        "pAdminPassword": {
+            "type": "securestring",
+            "minLength": 12
+        }
+    },
+    "variables": {
+        "vnetId": "[resourceId(parameters('pTeamResourceGroup'),'Microsoft.Network/virtualNetworks', concat(parameters('pTeamResourceGroup'), '-vnet'))]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', 'sndbx')]",
+        "prefix": "[resourceGroup().name]",
+        "virtualMachineName": "[concat(variables('prefix'), '-vm')]",
+        "storageAccountName": "[concat(variables('prefix'), 'vms', uniqueString(resourceGroup().id))]",
+        "networkInterfaceName": "[concat(variables('prefix'), '-nic')]",
+        "publicIpAddressName": "[concat(variables('prefix'), '-pip')]",
+        "publicIpAddressType": "Dynamic",
+        "networkSecurityGroupName": "[concat(variables('prefix'), '-nsg')]",
+        "storageAccountType": "Premium_LRS",
+        "Region": "[resourceGroup().location]",
+        "scriptFileName": "create-map-cmd-file.ps1",
+        "artifactsLocation":"https://adlsandboxcmnstorage.blob.core.windows.net/templates",
+        "artifactsLocationSasToken": "",
+        "shareName": "partage",
+        "scriptParameters": "[concat('-storageAccountName ', parameters('pSharedStorageAccountName'), ' ', '-shareName ', variables('shareName'))]"
+    },
+    "resources": [
+        {
+            "name": "[variables('virtualMachineName')]",
+            "type": "Microsoft.Compute/virtualMachines",
+            "apiVersion": "2015-06-15",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('pGroupeDeTravail')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/networkInterfaces/', variables('networkInterfaceName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]"
+            ],
+            "properties": {
+                "osProfile": {
+                    "computerName": "[variables('virtualMachineName')]",
+                    "adminUsername": "[parameters('pAdminUsername')]",
+                    "adminPassword": "[parameters('pAdminPassword')]",
+                    "windowsConfiguration": {
+                        "provisionVmAgent": "true"
+                    }
+                },
+                "hardwareProfile": {
+                    "vmSize": "[parameters('pVirtualMachineSize')]"
+                },
+                "storageProfile": {
+                    "imageReference": {
+                        "publisher": "microsoft-ads",
+                        "offer": "standard-data-science-vm",
+                        "sku": "standard-data-science-vm",
+                        "version": "latest"
+                    },
+                    "osDisk": {
+                        "name": "[variables('virtualMachineName')]",
+                        "vhd": {
+                            "uri": "[concat(reference(variables('storageAccountName'), providers('Microsoft.Storage', 'storageAccounts').apiVersions[0]).primaryEndpoints.blob, 'vhds/osdisk.vhd')]"
+                        },
+                        "createOption": "FromImage"
+                    },
+                    "dataDisks": [
+                        {
+                            "name": "datadisk1",
+                            "diskSizeGB": "500",
+                            "lun": 0,
+                            "vhd": {
+                                "uri": "[concat('https://',parameters('pVHDStorageAccountName'),'.blob.core.windows.net/vhds/',variables('virtualMachineName'), '-data','.vhd')]"
+                            },
+                            "createOption": "Empty"
+                        }
+                    ]
+                },
+                "networkProfile": {
+                    "networkInterfaces": [
+                        {
+                            "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('networkInterfaceName'))]"
+                        }
+                    ]
+                }
+            },
+            "plan": {
+                "name": "standard-data-science-vm",
+                "publisher": "microsoft-ads",
+                "product": "standard-data-science-vm"
+            },
+            "resources": [
+                {
+                    "type": "extensions",
+                    "name": "CustomScriptExtension",
+                    "apiVersion": "2015-06-15",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[variables('virtualMachineName')]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Compute",
+                        "type": "CustomScriptExtension",
+                        "typeHandlerVersion": "1.8",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "fileUris": [
+                                "[concat(variables('artifactsLocation'), '/', variables('ScriptFileName'), variables('artifactsLocationSasToken'))]"
+                            ],
+                            "commandToExecute": "[concat('powershell -ExecutionPolicy Unrestricted -File ', variables('scriptFileName'), ' ', variables('scriptParameters'))]"
+                        }
+                    }
+                },
+                {
+                    "type": "extensions",
+                    "name": "DscExtension",
+                    "apiVersion": "2015-06-15",
+                    "location": "[resourceGroup().location]",
+                    "dependsOn": [
+                        "[variables('virtualMachineName')]"
+                    ],
+                    "properties": {
+                        "publisher": "Microsoft.Powershell",
+                        "type": "DSC",
+                        "typeHandlerVersion": "2.20",
+                        "autoUpgradeMinorVersion": true,
+                        "settings": {
+                            "configuration":{
+                                "url": "[concat(variables('artifactsLocation'), '/StoragePool.ps1.zip')]",
+                                "script": "StoragePool.ps1",
+                                "function": "StoragePool"
+                            },
+                            "configurationArguments": {
+                                    "MachineName": "[variables('virtualMachineName')]"
+                            }
+                        },
+                        "protectedSettings": null
+                    }
+                }
+            ]
+        },
+        {
+            "name": "[variables('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2015-06-15",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('pGroupeDeTravail')]"
+            },
+            "properties": {
+                "accountType": "[variables('storageAccountType')]"
+            }
+        },
+        {
+            "name": "[variables('networkInterfaceName')]",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2016-09-01",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('pGroupeDeTravail')]"
+            },
+            "dependsOn": [
+                "[concat('Microsoft.Network/publicIpAddresses/', variables('publicIpAddressName'))]",
+                "[concat('Microsoft.Network/networkSecurityGroups/', variables('networkSecurityGroupName'))]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipconfig1",
+                        "properties": {
+                            "subnet": {
+                                "id": "[variables('subnetRef')]"
+                            },
+                            "privateIPAllocationMethod": "Dynamic",
+                            "publicIpAddress": {
+                                "id": "[resourceId('Microsoft.Network/publicIpAddresses', variables('publicIpAddressName'))]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('networkSecurityGroupName'))]"
+                }
+            }
+        },
+        {
+            "name": "[variables('publicIpAddressName')]",
+            "type": "Microsoft.Network/publicIpAddresses",
+            "apiVersion": "2016-09-01",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('pGroupeDeTravail')]"
+            },
+            "properties": {
+                "publicIpAllocationMethod": "[variables('publicIpAddressType')]"
+            }
+        },
+        {
+            "name": "[variables('networkSecurityGroupName')]",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2016-09-01",
+            "location": "[variables('Region')]",
+            "tags": {
+                "groupe":"[parameters('pGroupeDeTravail')]"
+            },
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "IPythonNB",
+                        "properties": {
+                            "priority": 1010,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "9999",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
+                    {
+                        "name": "MSSQL",
+                        "properties": {
+                            "priority": 1020,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "1433",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    },
+                    {
+                        "name": "default-allow-rdp",
+                        "properties": {
+                            "priority": 1030,
+                            "sourceAddressPrefix": "*",
+                            "protocol": "TCP",
+                            "destinationPortRange": "3389",
+                            "access": "Allow",
+                            "direction": "Inbound",
+                            "sourcePortRange": "*",
+                            "destinationAddressPrefix": "*"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
+}
