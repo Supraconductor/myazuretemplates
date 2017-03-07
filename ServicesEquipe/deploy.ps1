@@ -4,16 +4,16 @@ param(
  $commonTeamResourceGroupName, 
  [Parameter(Mandatory=$True, HelpMessage="Valeur du tag: group")]
  [string]
- $groupTag
+ $groupTag,
  [Parameter(Mandatory=$True, HelpMessage="Nom du group global avec le vNet")]
  [string]
- $commonGroupName 
+ $commonGroupName,
  [Parameter(Mandatory=$True, HelpMessage="Nom du vNet")]
  [string]
- $commonVNetName 
+ $commonVNetName,
  [Parameter(Mandatory=$True, HelpMessage="Nom du subnet à créer")]
  [string]
- $subnetName
+ $subnetName,
  [Parameter(Mandatory=$True, HelpMessage="IP range du nouveau subnet (ex:10.1.0.8/29)")]
  [string]
  $ipRange
