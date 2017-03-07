@@ -15,32 +15,6 @@
     },
     "resources": [
         {
-            "type": "Microsoft.Network/virtualNetworks",
-            "name": "[concat(resourceGroup().name, '-vnet')]",
-            "apiVersion": "2016-03-30",
-            "location": "canadaeast",
-            "tags": {
-                "groupe":"[parameters('groupTag')]"
-            },
-            "properties": {
-                "addressSpace": {
-                    "addressPrefixes": [
-                        "10.3.0.0/16"
-                    ]
-                },
-                "subnets": [
-                    {
-                        "name": "sndbx",
-                        "properties": {
-                            "addressPrefix": "10.3.0.0/24"
-                        }
-                    }
-                ]
-            },
-            "resources": [],
-            "dependsOn": []
-        },
-        {
             "name": "[variables('storageAccountName')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2015-06-15",

@@ -13,6 +13,15 @@
         },
         "pVHDStorageAccountName": {
             "value": "vhdmz7jevr642ffo"
+        },
+        "vNetName": {
+            "value": "ulaval"
+        },
+        "vNetResourceGroup": {
+            "value": "ulaval"
+        },
+        "subNetName": {
+            "value": "ulaval"
         }
     }
 }

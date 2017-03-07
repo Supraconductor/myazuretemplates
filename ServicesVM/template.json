@@ -20,6 +20,24 @@
                 "description": "Nom du storage account partagé pour les VHD de données."
             }
         },
+        "vNetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du vNet destination."
+            }
+        },
+        "vNetResourceGroup": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du groupe de ressources du vNet destination."
+            }
+        },        
+        "subNetName": {
+            "type": "string",
+            "metadata": {
+                "description": "Nom du subnet de destination."
+            }
+        },
         "pGroupeDeTravail": {
             "type": "string",
             "metadata": {
@@ -40,8 +58,8 @@
         }
     },
     "variables": {
-        "vnetId": "[resourceId(parameters('pTeamResourceGroup'),'Microsoft.Network/virtualNetworks', concat(parameters('pTeamResourceGroup'), '-vnet'))]",
-        "subnetRef": "[concat(variables('vnetId'), '/subnets/', 'sndbx')]",
+        "vnetId": "[resourceId(parameters('vNetResourceGroup'),'Microsoft.Network/virtualNetworks', parameters('vNetResourceGroup'), '-vnet')]",
+        "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subNetName'))]",
         "prefix": "[resourceGroup().name]",
         "virtualMachineName": "[concat(variables('prefix'), '-vm')]",
         "storageAccountName": "[concat(variables('prefix'), 'vms', uniqueString(resourceGroup().id))]",
