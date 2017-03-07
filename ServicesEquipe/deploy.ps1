@@ -1,7 +1,7 @@
 param(
  [Parameter(Mandatory=$True, HelpMessage="Nom du groupe de ressources pour les services communs")]
  [string]
- $commonTeamResourceGroupName,
+ $commonTeamResourceGroupName, 
  [Parameter(Mandatory=$True, HelpMessage="Valeur du tag: group")]
  [string]
  $groupTag
