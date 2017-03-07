@@ -35,7 +35,7 @@ else
 
 #Ajouter meilleure gestion des erreurs et exceptions...
 $vnet2 = Get-AzureRmVirtualNetwork -ResourceGroupName $commonGlobalResourceGroupName -Name $commonVNetName
-Add-AzureRmVirtualNetworkSubnetConfig -Name $commonTeamResourceGroupName -VirtualNetwork $vnet2 -AddressPrefix $subnetIpRange
+Add-AzureRmVirtualNetworkSubnetConfig -Name $subnetName -VirtualNetwork $vnet2 -AddressPrefix $subnetIpRange
 Set-AzureRmVirtualNetwork -VirtualNetwork $vnet2
 
 $results = New-AzureRmResourceGroupDeployment -ResourceGroupName $commonTeamResourceGroupName -TemplateFile $templateFilePath -TemplateParameterFile $parametersFilePath -Verbose;
