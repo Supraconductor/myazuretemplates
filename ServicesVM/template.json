@@ -2,12 +2,6 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "pTeamResourceGroup": {
-            "type": "string",
-            "metadata": {
-                "description": "Resource group de cette équipe pour les ressources communes."
-            }
-        },
         "pSharedStorageAccountName": {
             "type": "string",
             "metadata": {
@@ -58,7 +52,7 @@
         }
     },
     "variables": {
-        "vnetId": "[resourceId(parameters('vNetResourceGroup'),'Microsoft.Network/virtualNetworks', parameters('vNetResourceGroup'), '-vnet')]",
+        "vnetId": "[resourceId(parameters('vNetResourceGroup'),'Microsoft.Network/virtualNetworks', parameters('vNetName'))]",
         "subnetRef": "[concat(variables('vnetId'), '/subnets/', parameters('subNetName'))]",
         "prefix": "[resourceGroup().name]",
         "virtualMachineName": "[concat(variables('prefix'), '-vm')]",
