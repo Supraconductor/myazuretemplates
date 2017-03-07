@@ -3,25 +3,25 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "pTeamResourceGroup": {
-            "value": "ulaval-comm"
+            "value": "ulaval-common"
         },
         "pGroupeDeTravail": {
             "value": "ulaval"
         },
         "pSharedStorageAccountName": {
-            "value": "shrmz7jevr642ffo"
+            "value": "shrcox63ci5uk7oi"
         },
         "pVHDStorageAccountName": {
-            "value": "vhdmz7jevr642ffo"
+            "value": "vhdcox63ci5uk7oi"
         },
         "vNetName": {
-            "value": "ulaval"
+            "value": "global-vnet"
         },
         "vNetResourceGroup": {
-            "value": "ulaval"
+            "value": "tes-desj-global"
         },
         "subNetName": {
-            "value": "ulaval"
+            "value": "group1"
         }
     }
 }
