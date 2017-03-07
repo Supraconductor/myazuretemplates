@@ -9,7 +9,7 @@ param(
 
 $templateFilePath = "template.json"
 $parametersFilePath = "parameters.json"
-
+#JF
 #Create or check for existing resource group
 $resourceGroup = Get-AzureRmResourceGroup -Name $commonTeamResourceGroupName -ErrorAction SilentlyContinue
 if(!$resourceGroup)
