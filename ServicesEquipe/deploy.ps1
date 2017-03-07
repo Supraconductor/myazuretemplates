@@ -1,13 +1,13 @@
 param(
+ [Parameter(Mandatory=$True, HelpMessage="Nom du group global avec le vNet")]
+ [string]
+ $commonGlobalResourceGroupName,
  [Parameter(Mandatory=$True, HelpMessage="Nom du groupe de ressources pour les services communsde l'équipe'")]
  [string]
  $commonTeamResourceGroupName, 
  [Parameter(Mandatory=$True, HelpMessage="Valeur du tag: group")]
  [string]
  $groupTag,
- [Parameter(Mandatory=$True, HelpMessage="Nom du group global avec le vNet")]
- [string]
- $commonGroupName,
  [Parameter(Mandatory=$True, HelpMessage="Nom du vNet")]
  [string]
  $commonVNetName,
@@ -16,12 +16,12 @@ param(
  $subnetName,
  [Parameter(Mandatory=$True, HelpMessage="IP range du nouveau subnet (ex:10.1.0.8/29)")]
  [string]
- $ipRange
+ $subnetIpRange
 )
 
 $templateFilePath = "template.json"
 $parametersFilePath = "parameters.json"
-#JF
+
 #Create or check for existing resource group
 $resourceGroup = Get-AzureRmResourceGroup -Name $commonTeamResourceGroupName -ErrorAction SilentlyContinue
 if(!$resourceGroup)
@@ -34,8 +34,8 @@ else
 }
 
 #Ajouter meilleure gestion des erreurs et exceptions...
-$vnet2 = Get-AzureRmVirtualNetwork -ResourceGroupName $commonGroupName -Name $commonVNetName
-Add-AzureRmVirtualNetworkSubnetConfig -Name $commonTeamResourceGroupName -VirtualNetwork $vnet2 -AddressPrefix $ipRange
+$vnet2 = Get-AzureRmVirtualNetwork -ResourceGroupName $commonGlobalResourceGroupName -Name $commonVNetName
+Add-AzureRmVirtualNetworkSubnetConfig -Name $commonTeamResourceGroupName -VirtualNetwork $vnet2 -AddressPrefix $subnetIpRange
 Set-AzureRmVirtualNetwork -VirtualNetwork $vnet2
 
 $results = New-AzureRmResourceGroupDeployment -ResourceGroupName $commonTeamResourceGroupName -TemplateFile $templateFilePath -TemplateParameterFile $parametersFilePath -Verbose;

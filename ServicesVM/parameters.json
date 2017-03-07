@@ -3,22 +3,22 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "pGroupeDeTravail": {
-            "value": "ulaval"
+            "value": ""
         },
         "pSharedStorageAccountName": {
-            "value": "shrcox63ci5uk7oi"
+            "value": ""
         },
         "pVHDStorageAccountName": {
-            "value": "vhdcox63ci5uk7oi"
+            "value": ""
         },
         "vNetName": {
-            "value": "global-vnet"
+            "value": ""
         },
         "vNetResourceGroup": {
-            "value": "test-desj-global"
+            "value": ""
         },
         "subNetName": {
-            "value": "group1"
+            "value": ""
         }
     }
 }
